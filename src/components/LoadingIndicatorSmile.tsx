@@ -20,7 +20,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
-const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ size = 150 }) => {
+const LoadingIndicatorSmile: React.FC<LoadingIndicatorProps> = ({ size = 150 }) => {
   const progress = useSharedValue(0);
   const rotationAngle = useSharedValue(0);
   const spinAngle = useSharedValue(0);
@@ -266,4 +266,4 @@ const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ size = 150 }) => {
   );
 };
 
-export default LoadingIndicator;
+export default LoadingIndicatorSmile;
