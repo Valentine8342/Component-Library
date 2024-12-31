@@ -9,7 +9,8 @@ A curated collection of high-quality, reusable React Native components with beau
 
 **Description**: A playful, animated loading indicator with a smiley face that transforms during the loading process.
 
-**Preview**:
+**Preview**
+
 ![Loading Indicator Smile](assets/gifs/loading-indicator-smile.gif)
 
 **Features**:
@@ -18,6 +19,15 @@ A curated collection of high-quality, reusable React Native components with beau
 - Customizable size
 - Gradient background
 - Responsive design
+
+**Usage**:
+```typescript
+import LoadingIndicatorSmile from './src/components/LoadingIndicatorSmile';
+
+function MyComponent() {
+  return <LoadingIndicatorSmile size={150} />;
+}
+```
 
 </details>
 
