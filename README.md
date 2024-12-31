@@ -1,4 +1,4 @@
-# 🚀 React Native Component Library
+# Component Collection
 
 A curated collection of high-quality, reusable React Native components with beautiful animations and modern design.
 
@@ -13,39 +13,27 @@ A curated collection of high-quality, reusable React Native components with beau
 ![Loading Indicator Smile](assets/gifs/loading-indicator-smile.gif)
 
 **Features**:
+
 - Smooth, engaging animation
 - Customizable size
 - Gradient background
 - Responsive design
 
-**Usage**:
-\`\`\`typescript
-import LoadingIndicatorSmile from './src/components/LoadingIndicatorSmile';
-
-function MyComponent() {
-  return <LoadingIndicatorSmile size={150} />;
-}
-\`\`\`
 </details>
 
 ## 🛠 Installation
 
 ### Prerequisites
+
 - React Native
 - NativeWind
 - React Native Reanimated
 - React Native SVG
 
-### Setup
-\`\`\`bash
-npm install react-native-reanimated react-native-svg nativewind
-\`\`\`
-
 ## 📦 Components List
-- [x] Loading Indicator Smile
+
+- [X] Loading Indicator Smile
 
 ## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
-MIT License 
+Contributions are welcome! Please feel free to submit a Pull Request.
