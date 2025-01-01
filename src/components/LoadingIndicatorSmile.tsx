@@ -15,7 +15,6 @@ type LoadingIndicatorProps = {
   size?: number;
 };
 
-const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
@@ -26,17 +25,19 @@ const LoadingIndicatorSmile: React.FC<LoadingIndicatorProps> = ({ size = 150 }) 
   const spinAngle = useSharedValue(0);
   const mouthWidth = useSharedValue(1);
   const waveOffset = useSharedValue(0);
+  const liquidHeight = useSharedValue(1);
   const [loadingComplete, setLoadingComplete] = useState(false);
 
   useEffect(() => {
     let isCancelled = false;
     const duration = 5000;
+    const spinDuration = 1000;
 
     if (!loadingComplete) {
       waveOffset.value = withRepeat(
         withSequence(
-          withTiming(20, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
-          withTiming(-20, { duration: 1500, easing: Easing.inOut(Easing.ease) })
+          withTiming(Math.PI, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
+          withTiming(-Math.PI, { duration: 1500, easing: Easing.inOut(Easing.ease) })
         ),
         -1,
         true
@@ -55,8 +56,13 @@ const LoadingIndicatorSmile: React.FC<LoadingIndicatorProps> = ({ size = 150 }) 
         waveOffset.value = 0;
         
         rotationAngle.value = withTiming(0, { duration: 300 });
-        spinAngle.value = withTiming(360, { duration: 1000 });
-        mouthWidth.value = withTiming(2, { duration: 1000 });
+        spinAngle.value = withTiming(360, { duration: spinDuration });
+        mouthWidth.value = withTiming(2, { duration: spinDuration });
+        
+        liquidHeight.value = withTiming(0, { 
+          duration: spinDuration, 
+          easing: Easing.linear 
+        });
       }
     );
 
@@ -80,14 +86,7 @@ const LoadingIndicatorSmile: React.FC<LoadingIndicatorProps> = ({ size = 150 }) 
     return () => {
       isCancelled = true;
     };
-  }, [loadingComplete, progress, rotationAngle, spinAngle, mouthWidth, waveOffset]);
-
-  const animatedProps = useAnimatedProps(() => {
-    return {
-      y: size * (1 - progress.value),
-      height: size * progress.value,
-    };
-  });
+  }, [loadingComplete, progress, rotationAngle, spinAngle, mouthWidth, waveOffset, liquidHeight]);
 
   const animatedRotationStyle = useAnimatedStyle(() => {
     return {
@@ -105,22 +104,34 @@ const LoadingIndicatorSmile: React.FC<LoadingIndicatorProps> = ({ size = 150 }) 
     };
   });
 
-  const animatedMouthStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { scaleX: mouthWidth.value }
-      ]
-    };
-  });
 
   const animatedWavePath = useAnimatedProps(() => {
-    const amplitude = loadingComplete ? 0 : 20;
+    if (!loadingComplete) {
+      const path = `
+        M0,${size * (1 - progress.value)} 
+        C${size * 0.125},${size * (1 - progress.value) + (30 * Math.sin(2 * waveOffset.value))} 
+          ${size * 0.25},${size * (1 - progress.value) + (30 * Math.sin(2 * waveOffset.value * 1.5))} 
+          ${size * 0.5},${size * (1 - progress.value)} 
+        C${size * 0.75},${size * (1 - progress.value) - (30 * Math.sin(2 * waveOffset.value))} 
+          ${size * 0.875},${size * (1 - progress.value) - (30 * Math.sin(2 * waveOffset.value * 1.5))} 
+          ${size},${size * (1 - progress.value)} 
+        V${size} 
+        H0 
+        Z
+      `;
+      return { d: path };
+    }
     
+    const emptyingAmplitude = 20;
+    const baseY = size * (1 - liquidHeight.value);
     const path = `
-      M0,${size * (1 - progress.value)} 
-      Q${size * 0.25},${size * (1 - progress.value) + amplitude + waveOffset.value} 
-        ${size * 0.5},${size * (1 - progress.value)} 
-      T${size},${size * (1 - progress.value) + amplitude + waveOffset.value} 
+      M0,${baseY} 
+      C${size * 0.125},${baseY + emptyingAmplitude * Math.sin(4 * waveOffset.value)} 
+        ${size * 0.25},${baseY - emptyingAmplitude * Math.cos(4 * waveOffset.value)} 
+        ${size * 0.5},${baseY} 
+      C${size * 0.75},${baseY + emptyingAmplitude * Math.cos(4 * waveOffset.value)} 
+        ${size * 0.875},${baseY - emptyingAmplitude * Math.sin(4 * waveOffset.value)} 
+        ${size},${baseY} 
       V${size} 
       H0 
       Z
@@ -166,7 +177,8 @@ const LoadingIndicatorSmile: React.FC<LoadingIndicatorProps> = ({ size = 150 }) 
               x2='0%'
               y2='100%'
             >
-              <Stop offset='0%' stopColor='#FFD700' />
+              <Stop offset='0%' stopColor='#FFE135' />
+              <Stop offset='50%' stopColor='#FFD700' />
               <Stop offset='100%' stopColor='#FFA500' />
             </LinearGradient>
 
