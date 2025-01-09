@@ -11,7 +11,7 @@ A curated collection of high-quality, reusable React Native components with beau
 
 **Preview**
 
-![Loading Indicator Smile](assets/gifs/loading-indicator-smile.gif)
+<img src="assets/gifs/loading-indicator-smile.gif" width="200" height="200" alt="Loading Indicator Smile">
 
 **Features**:
 
